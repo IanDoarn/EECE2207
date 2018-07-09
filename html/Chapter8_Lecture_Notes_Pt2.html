@@ -1,0 +1,252 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Curve Fitting (Regression) with Polynomials: The polyfit Function</title><meta name="generator" content="MATLAB 9.2"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-12-05"><meta name="DC.source" content="Chapter8_Lecture_Notes_Pt2.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Curve Fitting (Regression) with Polynomials: The <i>polyfit</i> Function</h1><!--introduction--><p>Polynomials can be used to fit data points in two ways. In one the polynomial passes through all the data points, and in the other the polynomial does not necessarily pass through any of the points but overall gives a good approximation of the data. The two options are described below.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Polynomials that pass through all the points:</a></li><li><a href="#2">Polynomials that do not necessarily pass through any of the points:</a></li><li><a href="#3">polyfit(x,y,n)</a></li><li><a href="#4">Curve Fitting with Functions Other than Polynomials</a></li><li><a href="#5">Example Problems</a></li></ul></div><h2 id="1">Polynomials that pass through all the points:</h2><p>When n points <img src="Chapter8_Lecture_Notes_Pt2_eq01142016630197873102.png" alt="$(x_i, y_i)$"> are given, it is possible to write a polynomial of degree <i>n - 1</i> that passes through all the points. For example, if two points are given it is possible to write a linear equation in the form of <img src="Chapter8_Lecture_Notes_Pt2_eq01020601814478002711.png" alt="$y = mx + b$"> that passes through the points. With three points, the equation has the form of <img src="Chapter8_Lecture_Notes_Pt2_eq12537160343762805313.png" alt="$y = ax^2 + bx + c$">. With <i>n</i> points the polynomial has the form</p><p><img src="Chapter8_Lecture_Notes_Pt2_eq16958373688574255532.png" alt="$$a_{n-1} x^{n-l} +a_{n-2}x^{n-2}+ \ldots +a_1 x+a_0$">$.</p><p>The coefficients of the polynomial are determined by substituting each point in the polynomial and then solving the n equations for the coefficients. As will be shown later in this section, polynomials of high degree might give a large error if they are used to estimate values between data points.</p><h2 id="2">Polynomials that do not necessarily pass through any of the points:</h2><p>When <i>n</i> points are given, it is possible to write a polynomial of degree less than n - 1 that does not necessarily pass through any of the points but that overall approximates the data. The most common method of finding the best fit to data points is the method of <i>least squares</i>. In this method, the coefficients of the polynomial are determined by minimizing the sum of the squares of the <i>residuals</i> at all the data points. The <b><i>residual</i></b> at each point is defined as the difference between the value of the polynomial and the value of the data.</p><p>For example, consider the case of finding the equation of a straight line that best fits four data points as shown below</p><p><img vspace="5" hspace="5" src="Lect8_Pt2_1.jpg" alt=""> </p><p>The points are <img src="Chapter8_Lecture_Notes_Pt2_eq05266357503654371638.png" alt="$(x_1,y_1)$">, <img src="Chapter8_Lecture_Notes_Pt2_eq16741160460121806083.png" alt="$(x_2,y_2)$">, <img src="Chapter8_Lecture_Notes_Pt2_eq15770456116969273574.png" alt="$(x_3,y_3)$">, and <img src="Chapter8_Lecture_Notes_Pt2_eq02511212787290654572.png" alt="$(x_4,y_4)$">, and the polynoymial of the first degree can be written as</p><p><img src="Chapter8_Lecture_Notes_Pt2_eq05493458228351679098.png" alt="$$f(x) = a1x + a0$"></p><p>The residual, <img src="Chapter8_Lecture_Notes_Pt2_eq03418928397651894374.png" alt="$R_i$">, at each point is the difference between the value of the function at <img src="Chapter8_Lecture_Notes_Pt2_eq08383031602117067423.png" alt="$x_i$"> and <img src="Chapter8_Lecture_Notes_Pt2_eq08366435799313302571.png" alt="$y_i$"></p><p><img src="Chapter8_Lecture_Notes_Pt2_eq11054183115486595256.png" alt="$$R_i = f(x_i) -y_i $$"> .</p><p>An equation for the sum of the squares of the residuals <img src="Chapter8_Lecture_Notes_Pt2_eq03418928397651894374.png" alt="$R_i$"> of all the points is given by:</p><p><img src="Chapter8_Lecture_Notes_Pt2_eq11324612555702781731.png" alt="$$R = [f(x_l)-y_1]^2 + [f(x_2)-y_2]^2 + [f(x_3)-y_3]^2 + [f(x_4)-y_4]^2$$"></p><p>or, after substituting the equation of the polynomial at each point, by:</p><p><img src="Chapter8_Lecture_Notes_Pt2_eq17393032173486037784.png" alt="$$R = [a_lx_l + a_0 -y_1]^2 + [a_lx_2 + a_0-y_2]^2 + [a_lx_3 + a_0-y_3]^2 + [a_lx_4 + a_0-y_4]$$"></p><p>At this stage R is a function of <img src="Chapter8_Lecture_Notes_Pt2_eq04545382943342363534.png" alt="$a_1$"> and <img src="Chapter8_Lecture_Notes_Pt2_eq00679465067180486656.png" alt="$a_0$">. The minimum of R can be determined by taking the partial derivative of R with respect to a1 and a0 (two equations) and equating them to zero:</p><p><img src="Chapter8_Lecture_Notes_Pt2_eq02940454636057136789.png" alt="$$\frac{\partial R}{\partial a_1} = 0$$"></p><p>and</p><p><img src="Chapter8_Lecture_Notes_Pt2_eq02168953671500104939.png" alt="$$ \frac{\partial R}{\partial a_0} = 0$$"></p><p>This results in a system of two equations with two unknowns,  <img src="Chapter8_Lecture_Notes_Pt2_eq04545382943342363534.png" alt="$a_1$"> and <img src="Chapter8_Lecture_Notes_Pt2_eq00679465067180486656.png" alt="$a_0$">. The solution of these equations gives the values of the coefficients of the polynomial that best fits the data. The same procedure can be followed with more points and higher-order polynomials. More details on the least squares method can be found in books on numerical analysis.</p><h2 id="3">polyfit(x,y,n)</h2><p>Curve fitting with polynomials is done in MATLAB with the polyfit function, which uses the least squares method. The basic form of the polyfit function is:</p><p>$$p = polyfit(x,y,n)</p><p><b><i>p</i></b> is the vector of the coefficients of the polynomial that fits the data.</p><p><b><i>x</i></b> is a vector wi the horizontal coordinates of the data points (independent variable). <b><i>y</i></b> is a vector with the vertical coordinates of the data points (dependent variable). <b><i>n</i></b> is the degree of the polynomial.</p><p>For the same set of <i>m</i> points, the polyfit function can be used to fit polynomials of any order up to <i>n = m - 1</i>. If <i>n = 1</i> the polynomial is a straight line, if <i>n = 2</i>, the polynomial is a parabola, and so on. The polynomial passes through all the points if <i>n = m -1</i> (the order of the polynomial is one less than the number of points). It should be pointed out here that a polynomial that passes through all the points, or polynomials with higher order, do not necessarily give a better fit overall. High-order polynomials can deviate significantly between the data points.</p><h2 id="4">Curve Fitting with Functions Other than Polynomials</h2><p>What if the application requires that you fit the data using functions that are not polynomials. This sections describes Matlab's curve fitting capabilities in these situations. We will find that some functions fit the data better than others.  We will cover curve fitting using <i>polyfit</i> with the following functions.</p><p><img vspace="5" hspace="5" src="Lect8_Pt2_2.jpg" alt=""> </p><p><b>Step 1:</b></p><p>Rewrite the functions in a form that can be fitted with the linear polynomial <b><i>(n=1)</i></b>, which is</p><p><img src="Chapter8_Lecture_Notes_Pt2_eq01546176761796703776.png" alt="$$y = mx+b$$"></p><p>For example</p><p><img src="Chapter8_Lecture_Notes_Pt2_eq10496663902572673342.png" alt="$$y = bx^m \longrightarrow log_{base}(y)= log_{base}(b)+m\cdot&#xA;log_{base}(x) $$"></p><p>If we define new variables,</p><p><img src="Chapter8_Lecture_Notes_Pt2_eq05226003672728730568.png" alt="$$y_2=log_{base}(y), b_2=log_{base}(b), \mbox{ and }, x_2 = log_{base}(x)&#xA;$$"></p><p>We can rewrite the orignal equation as a first order equation in <img src="Chapter8_Lecture_Notes_Pt2_eq03385156042344747669.png" alt="$x_2$"> as</p><p><img src="Chapter8_Lecture_Notes_Pt2_eq17607284510060010187.png" alt="$$y_2=m \cdot x_2 + b_2$$"></p><p>The result is shown below:</p><p><img vspace="5" hspace="5" src="Lect8_Pt2_3.jpg" alt=""> </p><p>Note the linear relationships between</p><div><ul><li>ln(y) and ln(x)  or log(y) and log(x)  (power funtion)</li><li>ln(y) and x       (exponential function)</li><li>log(y) and x      (exponential function (base 10))</li><li>1/y  and x        (reciprocal function)</li><li>y and ln(x) or y and log(x) (logarithmic function)</li></ul></div><p><b>Step 2:</b></p><p>The linear relationship above are cool, because we can now just use the <b><i>polyfit(x,y,1)</i></b> form to calculate the best fit with the following substitutions for the arguments</p><p><img vspace="5" hspace="5" src="Lect8_Pt2_3.jpg" alt=""> </p><p><b>Step 3:</b></p><p>The result of the substitution is a two element vector <i>p</i> with</p><div><ul><li>p(1) representing the value for the constant <i>m</i></li><li>p(2) is the value of <i>b</i> needed for the appropriate form of the intercept.</li></ul></div><p><b>Estimating the best form for the approximation</b></p><p>If you plot the data using different combinations of linear and logarithmic axes, you can get a good idea of which approxmiation to use by taking note of which combination results in a plot that appears to fit a straight line.  The following graphic shows some good combinations:</p><p><img vspace="5" hspace="5" src="Lect8_Pt2_4.jpg" alt=""> </p><p><b>Other Things you might want to consider when choosing a function</b></p><div><ul><li>Exponential functions cannot pass through the origin</li><li>Exponential functions can only fit dat with all positive y's or all negative y's</li><li>Logarithmic function cannot model x = 0 or negative values of x</li><li>For the power function y=0 when x = 0</li><li>The reciprocal equation cannot model y = 0</li></ul></div><p><b>Let's do an example problem</b></p><h2 id="5">Example Problems</h2><p>18, 21, 24, 25</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Curve Fitting (Regression) with Polynomials: The _polyfit_ Function
+% Polynomials can be used to fit data points in two ways. In one the polynomial
+% passes through all the data points, and in the other the polynomial does not necessarily
+% pass through any of the points but overall gives a good approximation of the
+% data. The two options are described below.
+% 
+%% Polynomials that pass through all the points:
+% When n points $(x_i, y_i)$ are given, it is possible to write a
+% polynomial of degree _n - 1_
+% that passes through all the points. For example, if two points are given it is possible
+% to write a linear equation in the form of $y = mx + b$ that passes through the
+% points. With three points, the equation has the form of $y = ax^2 + bx +
+% c$. With _n_
+% points the polynomial has the form 
+% 
+% $$a_{n-1} x^{n-l} +a_{n-2}x^{n-2}+ \ldots +a_1 x+a_0$$. 
+% 
+% The coefficients of the polynomial are determined by substituting each point in the
+% polynomial and then solving the n equations for the coefficients. As will be shown
+% later in this section, polynomials of high degree might give a large error if they are
+% used to estimate values between data points.
+% 
+% 
+%% Polynomials that do not necessarily pass through any of the points:
+% When _n_ points are given, it is possible to write a polynomial of degree less than
+% n - 1 that does not necessarily pass through any of the points but that overall
+% approximates the data. The most common method of finding the best fit to data
+% points is the method of _least squares_. In this method, the coefficients of the polynomial
+% are determined by minimizing the sum of the squares of the _residuals_ at all
+% the data points. The *_residual_* at each point is defined as the difference between the
+% value of the polynomial and the value of the data. 
+% 
+% For example, consider the case
+% of finding the equation of a straight line that best fits four data points as shown below
+% 
+% <<Lect8_Pt2_1.jpg>>
+% 
+% 
+% The points are $(x_1,y_1)$, $(x_2,y_2)$, $(x_3,y_3)$, and $(x_4,y_4)$, and the polynoymial
+% of the first degree can be written as 
+% 
+% $$f(x) = a1x + a0$
+% 
+% The residual, $R_i$, at each
+% point is the difference between the value of the function at $x_i$ and $y_i$
+% 
+% $$R_i = f(x_i) -y_i $$ . 
+% 
+% An equation for the sum of the squares of the residuals $R_i$ of all
+% the points is given by:
+% 
+% $$R = [f(x_l)-y_1]^2 + [f(x_2)-y_2]^2 + [f(x_3)-y_3]^2 + [f(x_4)-y_4]^2$$
+% 
+% or, after substituting the equation of the polynomial at each point, by:
+% 
+% $$R = [a_lx_l + a_0 -y_1]^2 + [a_lx_2 + a_0-y_2]^2 + [a_lx_3 + a_0-y_3]^2 + [a_lx_4 + a_0-y_4]$$
+% 
+% At this stage R is a function of $a_1$ and $a_0$. The minimum of R can be determined
+% by taking the partial derivative of R with respect to a1 and a0 (two equations) and
+% equating them to zero:
+% 
+% $$\frac{\partial R}{\partial a_1} = 0$$
+% 
+% and
+% 
+% $$ \frac{\partial R}{\partial a_0} = 0$$
+% 
+% This results in a system of two equations with two unknowns,  $a_1$ and $a_0$. The
+% solution of these equations gives the values of the coefficients of the polynomial
+% that best fits the data. The same procedure can be followed with more points and
+% higher-order polynomials. More details on the least squares method can be found
+% in books on numerical analysis.
+% 
+%% polyfit(x,y,n)
+% 
+% Curve fitting with polynomials is done in MATLAB with the polyfit
+% function, which uses the least squares method. The basic form of the polyfit
+% function is:
+%
+% $$p = polyfit(x,y,n)
+%
+% *_p_* is the vector of the coefficients of the polynomial that fits the data.
+%
+% *_x_* is a vector wi the horizontal coordinates of the data points (independent variable).
+% *_y_* is a vector with the vertical coordinates of the data points (dependent variable).
+% *_n_* is the degree of the polynomial.
+%
+% For the same set of _m_ points, the polyfit function can be used to fit polynomials
+% of any order up to _n = m - 1_. If _n = 1_ the polynomial is a straight
+% line, if _n = 2_,
+% the polynomial is a parabola, and so on. The polynomial passes through all the
+% points if _n = m -1_ (the order of the polynomial is one less than the number of
+% points). It should be pointed out here that a polynomial that passes through all the
+% points, or polynomials with higher order, do not necessarily give a better fit overall.
+% High-order polynomials can deviate significantly between the data points.
+
+%% Curve Fitting with Functions Other than Polynomials
+%
+% What if the application requires that you fit the data using functions that
+% are not polynomials. This sections describes Matlab's curve fitting capabilities
+% in these situations. We will find that some functions fit the data better
+% than others.  We will cover curve fitting using _polyfit_ with the following functions.
+%
+%
+% <<Lect8_Pt2_2.jpg>>
+%
+% *Step 1:*
+%
+% Rewrite the functions in a form that can be fitted with the linear
+% polynomial *_(n=1)_*, which is
+%
+% $$y = mx+b$$
+%
+% For example
+%
+% $$y = bx^m \longrightarrow log_{base}(y)= log_{base}(b)+m\cdot
+% log_{base}(x) $$
+%
+% If we define new variables,
+%
+% $$y_2=log_{base}(y), b_2=log_{base}(b), \mbox{ and }, x_2 = log_{base}(x)
+% $$
+%
+% We can rewrite the orignal equation as a first order equation in $x_2$ as
+%
+% $$y_2=m \cdot x_2 + b_2$$
+%
+% The result is shown below:
+%
+% <<Lect8_Pt2_3.jpg>>
+%
+% Note the linear relationships between
+% 
+% * ln(y) and ln(x)  or log(y) and log(x)  (power funtion)
+% * ln(y) and x       (exponential function)
+% * log(y) and x      (exponential function (base 10))
+% * 1/y  and x        (reciprocal function)
+% * y and ln(x) or y and log(x) (logarithmic function)
+%
+% *Step 2:*
+%
+% The linear relationship above are cool, because we can now just use the *_polyfit(x,y,1)_* form to
+% calculate the best fit with the following substitutions for the arguments
+%
+% <<Lect8_Pt2_3.jpg>>
+%
+%
+% *Step 3:*
+%
+% The result of the substitution is a two element vector _p_ with 
+%
+% * p(1) representing the value for the constant _m_
+% * p(2) is the value of _b_ needed for the appropriate form of the
+% intercept.
+%
+% 
+% *Estimating the best form for the approximation*
+% 
+% If you plot the data using different combinations of linear and
+% logarithmic axes, you can get a good idea of which approxmiation to use
+% by taking note of which combination results in a plot that appears to fit
+% a straight line.  The following graphic shows some good combinations:
+%
+% <<Lect8_Pt2_4.jpg>>
+%
+% *Other Things you might want to consider when choosing a function*
+%
+% * Exponential functions cannot pass through the origin
+% * Exponential functions can only fit dat with all positive y's or all
+% negative y's
+% * Logarithmic function cannot model x = 0 or negative values of x
+% * For the power function y=0 when x = 0
+% * The reciprocal equation cannot model y = 0
+%
+% *Let's do an example problem*
+%
+%% Example Problems
+%
+% 18, 21, 24, 25 
+
+##### SOURCE END #####
+--></body></html>

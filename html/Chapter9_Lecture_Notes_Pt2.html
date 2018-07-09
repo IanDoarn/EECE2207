@@ -1,0 +1,325 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Chapter 9 Notes Part 2:</title><meta name="generator" content="MATLAB 9.2"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-12-05"><meta name="DC.source" content="Chapter9_Lecture_Notes_Pt2.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Chapter 9 Notes Part 2:</h1><!--introduction--><p>Differential equations play a crucial role in virtually every physical phenomenon involved in science and engineering.  Unfortunately, only a ilmited number of them can be solved analytically.  So we use numerical methods to approximate the solutions in those cases.  This is not a trivial task however and thus there are multiple numerical methods developed for different types of equations.</p><p>This section describes in deail how MATLAB can be sued to solve a first order differential equation.  This solutio provides the basis for solving higher-order equations and systems of equations.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Standard First Order Differential Form</a></li><li><a href="#2">ODE Solution Step 1: Write the Problem in Standard Form</a></li><li><a href="#3">ODE Solution Step 2: Create User-Defined or Anonymous Function</a></li><li><a href="#4">ODE Solution Step 3: Select a Method of Solution</a></li><li><a href="#5">ODE Solution Step 4: Solve the ODE</a></li><li><a href="#8">Example Problems</a></li></ul></div><h2 id="1">Standard First Order Differential Form</h2><p>The first order <b><i>Ordinary Differential Equation</i></b> (ODE) is an equation of an independent variable <i>t</i>, a dependent variable <i>y</i>, and derivatives of the independent variable.  It can be represented  in the following form:</p><p><img src="Chapter9_Lecture_Notes_Pt2_eq09927541501136426365.png" alt="$$\frac{dy}{dt} = f(t,y)$$"></p><p>The solution is the function</p><p><img src="Chapter9_Lecture_Notes_Pt2_eq10853670387635537117.png" alt="$$y(x) = f(x)$$"></p><p>Where, <i>y(t)</i> satisfies the differential equation above.</p><p>In general, many functions can satisfy a given ODE.  However, additional information, in the form of initial conditions, are required to determine the solution to a specific problem.  Also, the independent variable will not always be a function of time (t).  However, since a large number of applications are time dependent adn to be consistent with MATLAB documentation</p><h2 id="2">ODE Solution Step 1: Write the Problem in Standard Form</h2><p><img src="Chapter9_Lecture_Notes_Pt2_eq11017788755479542381.png" alt="$$\frac{dy}{dt}=f(t,y) $$"></p><p><img src="Chapter9_Lecture_Notes_Pt2_eq12788091496632591530.png" alt="$$t_0\le t \le t_f $$">  with</p><p><img src="Chapter9_Lecture_Notes_Pt2_eq13587964924671018954.png" alt="$y = y_0$"> at <img src="Chapter9_Lecture_Notes_Pt2_eq10987586943176847453.png" alt="$t=t_0$"></p><h2 id="3">ODE Solution Step 2: Create User-Defined or Anonymous Function</h2><p>function dydt = ODEexp1(t,y) dydt = (t.^3-2.*y)./t;</p><p>or</p><p>Let's use an anonymous function to create a usable function handle of the mathematical</p><pre class="codeinput">ode1 = @(t,y) (t.^3-2*y)./t
+</pre><pre class="codeoutput">
+ode1 =
+
+  function_handle with value:
+
+    @(t,y)(t.^3-2*y)./t
+
+</pre><h2 id="4">ODE Solution Step 3: Select a Method of Solution</h2><p>.</p><p>Many numerical methods have been developed to solve first-order ODEs, and several of the methods are available as built-in functions in MATLAB. In a typical numerical method, the time interval is divided into small time steps. The solution starts at the known pointy0, and then by using one of the integration methods the value of y is calculated at each time step.</p><p><img src="Chapter9_Lecture_Notes_Pt2_eq13315413744647246706.png" alt="$$ \begin{tabular}{ll} \textbf{ODE Solver Name} &amp; \textbf{Description} \\&#xA;ode45   &amp; For nonstiff problemsone-step solver, best to apply&#xA;as a first try for most problems. Based on explicit&#xA;Runge-Kutta method. \\&#xA;ode23   &amp; For nonstiff problems, one-step solver. Based on&#xA;explicit Runge-Kutta method. Often quicker but less&#xA;accurate than ode45. \\&#xA;ode113  &amp; For nonstiff problems, multistep solver.\\&#xA;ode15s  &amp; For stiff problems, multistep solver. Use if ode45&#xA;failed. Uses a variable order method.\\&#xA;ode23t  &amp; For stiff problems, one-step solver. Can solve some&#xA;problems that ode15s cannot.\\&#xA;ode23t  &amp; For moderately stiff problems.\\&#xA;ode23tb &amp; For stiff problems. Often more efficient than ode15s\\&#xA;\end{tabular} $$"></p><p>For our demonstration, we will use ode45</p><h2 id="5">ODE Solution Step 4: Solve the ODE</h2><p>The form of the command that is used to solve an initial value ODE problem is the same for all the solvers and for all the equations that are solved.  The form is</p><p><b><i>[t,y] = solver_name(ODEfun,tspan,y0)</i></b></p><p><i>solver_name</i> : Is the name of the solver (numerical method)  e.g. ode45 or ode23s</p><p><i>ODEfun</i> :  The function from Step 2 that calculates <img src="Chapter9_Lecture_Notes_Pt2_eq15161582677740644772.png" alt="$\frac{dy}{dt}$"> for given values of <i>t</i> and <i>y</i>. If it was written as a user-defined function, the function handle is entered. If it was written as an anonymous funcion, the name of the anonymous function is entered.</p><p><i>tspan</i> : A vector that specifies the interval of the solution. The vector must have at least two elements but can have more. If the vector has only two elements, the elements must be [t0,tf], wihi are the initial and final points of the solution interval. The vector <i>tspan</i> can have additional points between the first and last points. The number of elements in tspan affects the output from the command.</p><p><i>y0</i> :The initial value of <i>y</i>  ( the value of <i>y</i> at the first point of the interval</p><p><i>[t,y] : The output which is the solution of the ODE. _t</i> and <i>y</i> are column vectors. The first and last points are teh beginning and end points of the interval. The spacing and number of points in between depends on the input vector tspan. If tspan has two elements (the beginning and end points), the vectors t and y contain the solution at every integration step calculated by the solver.  If tspan has more than two points (additional points between the first and the last), the vectors <i>t</i> and <i>y</i> contain the solution only at these points.  The number of points in tspan does not affect the time steps used for the solution by the program</p><pre class="codeinput"><span class="comment">%Call the solver function</span>
+dt = 0.1;
+[t,y] = ode45(ode1,[1:dt:3],4.2);
+
+plot(t,y)
+xlabel(<span class="string">'time (s)'</span>);
+ylabel(<span class="string">'Output'</span>);
+title(<span class="string">'Output Solution From ode45'</span>);
+</pre><img vspace="5" hspace="5" src="Chapter9_Lecture_Notes_Pt2_01.png" alt=""> <p>Use the given data to do a quick comparision.  We'll learn about the 'diff' function later. Until then, do a help on it now to learn of its functionality.</p><pre class="codeinput">help <span class="string">diff</span>
+
+<span class="comment">% We will use it to approximate the first derivative of a data</span>
+<span class="comment">% vector...Note for diff, we actually lose one data point.</span>
+der_1st = diff(y)/dt;
+
+<span class="comment">% Now let's plot it</span>
+figure(1)
+
+<span class="comment">%If the function returned by the solver is correct, we should be able sub</span>
+<span class="comment">%the original function back in to check it.</span>
+N = length(t);
+t1 = t(1:N-1);
+
+out1 = ode1(t1,y(2:N));
+plot(t1, out1, t1,der_1st, <span class="string">'r*'</span> )
+legend(<span class="string">'Input Derivative'</span>, <span class="string">'Approximate Derivative'</span>);
+</pre><pre class="codeoutput"> DIFF Difference and approximate derivative.
+    DIFF(X), for a vector X, is [X(2)-X(1)  X(3)-X(2) ... X(n)-X(n-1)].
+    DIFF(X), for a matrix X, is the matrix of row differences,
+       [X(2:n,:) - X(1:n-1,:)].
+    DIFF(X), for an N-D array X, is the difference along the first
+       non-singleton dimension of X.
+    DIFF(X,N) is the N-th order difference along the first non-singleton 
+       dimension (denote it by DIM). If N &gt;= size(X,DIM), DIFF takes 
+       successive differences along the next non-singleton dimension.
+    DIFF(X,N,DIM) is the Nth difference function along dimension DIM. 
+       If N &gt;= size(X,DIM), DIFF returns an empty array.
+ 
+    Examples:
+       h = .001; x = 0:h:pi;
+       diff(sin(x.^2))/h is an approximation to 2*cos(x.^2).*x
+       diff((1:10).^2) is 3:2:19
+ 
+       If X = [3 7 5
+               0 9 2]
+       then diff(X,1,1) is [-3 2 -3], diff(X,1,2) is [4 -2
+                                                      9 -7],
+       diff(X,2,2) is the 2nd order difference along the dimension 2, and
+       diff(X,3,2) is the empty matrix.
+ 
+    See also GRADIENT, SUM, PROD.
+
+    Reference page in Doc Center
+       doc diff
+
+    Other functions named diff
+
+       datetime/diff    duration/diff    sym/diff    tall/diff
+
+</pre><img vspace="5" hspace="5" src="Chapter9_Lecture_Notes_Pt2_02.png" alt=""> <p>Let's take it one step further and see if we can come up with a polynomial fit using our regression analysis function.</p><pre class="codeinput">approxFit = polyfit(t,y,6)
+
+<span class="comment">%Now lets plot the</span>
+out1 = polyval(approxFit,t);
+plot(t,y, t,out1,<span class="string">'rx'</span>)
+legend(<span class="string">'ODE Solver Output'</span>, <span class="string">'Regression Analysis Output'</span>);
+xlabel(<span class="string">'time (s)'</span>);
+ylabel(<span class="string">'System Output'</span>);
+title(<span class="string">'Output Comparison'</span>);
+</pre><pre class="codeoutput">
+approxFit =
+
+    0.2237   -3.0435   17.2476  -52.2316   91.2139  -88.0757   38.8637
+
+</pre><img vspace="5" hspace="5" src="Chapter9_Lecture_Notes_Pt2_03.png" alt=""> <h2 id="8">Example Problems</h2><p>29, 35, 36, 38</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Chapter 9 Notes Part 2:
+%
+% Differential equations play a crucial role in virtually every physical
+% phenomenon involved in science and engineering.  Unfortunately, only a
+% ilmited number of them can be solved analytically.  So we use numerical
+% methods to approximate the solutions in those cases.  This is not a
+% trivial task however and thus there are multiple numerical methods
+% developed for different types of equations.
+%
+% This section describes in deail how MATLAB can be sued to solve a first order 
+% differential equation.  This solutio provides the basis for solving
+% higher-order equations and systems of equations.
+%
+%% Standard First Order Differential Form
+%
+% The first order *_Ordinary Differential Equation_* (ODE) is an equation
+% of an independent variable _t_, a dependent variable _y_, and derivatives
+% of the independent variable.  It can be represented  in the following form:
+% 
+% $$\frac{dy}{dt} = f(t,y)$$
+%
+% The solution is the function
+%
+% $$y(x) = f(x)$$
+%
+% Where, _y(t)_ satisfies the differential equation above.
+%
+% In general, many functions can satisfy a given ODE.  However, additional
+% information, in the form of initial conditions, are required to determine
+% the solution to a specific problem.  Also, the independent variable will
+% not always be a function of time (t).  However, since a large number of
+% applications are time dependent adn to be consistent with MATLAB
+% documentation
+
+%% ODE Solution Step 1: Write the Problem in Standard Form
+%
+% $$\frac{dy}{dt}=f(t,y) $$
+%
+% $$t_0\le t \le t_f $$  with 
+%
+% $y = y_0$ at $t=t_0$
+
+
+%% ODE Solution Step 2: Create User-Defined or Anonymous Function
+% 
+% function dydt = ODEexp1(t,y)
+% dydt = (t.^3-2.*y)./t;
+% 
+% or 
+% 
+% Let's use an anonymous function to create a usable function handle of the
+% mathematical
+ 
+ode1 = @(t,y) (t.^3-2*y)./t
+
+%% ODE Solution Step 3: Select a Method of Solution
+%
+% .
+% 
+% Many numerical methods have been developed to solve first-order ODEs, and
+% several of the methods are available as built-in functions in MATLAB. In a typical
+% numerical method, the time interval is divided into small time steps. The solution
+% starts at the known pointy0, and then by using one of the integration methods the
+% value of y is calculated at each time step.
+% 
+% $$ \begin{tabular}{ll} \textbf{ODE Solver Name} & \textbf{Description} \\
+% ode45   & For nonstiff problemsone-step solver, best to apply
+% as a first try for most problems. Based on explicit
+% Runge-Kutta method. \\
+% ode23   & For nonstiff problems, one-step solver. Based on
+% explicit Runge-Kutta method. Often quicker but less
+% accurate than ode45. \\
+% ode113  & For nonstiff problems, multistep solver.\\
+% ode15s  & For stiff problems, multistep solver. Use if ode45
+% failed. Uses a variable order method.\\
+% ode23t  & For stiff problems, one-step solver. Can solve some
+% problems that ode15s cannot.\\
+% ode23t  & For moderately stiff problems.\\
+% ode23tb & For stiff problems. Often more efficient than ode15s\\
+% \end{tabular} $$
+%
+% For our demonstration, we will use ode45
+
+
+%% ODE Solution Step 4: Solve the ODE
+%
+% The form of the command that is used to solve an initial value ODE
+% problem is the same for all the solvers and for all the equations that
+% are solved.  The form is
+%
+%
+% *_[t,y] = solver_name(ODEfun,tspan,y0)_*
+%
+% _solver_name_ : Is the name of the solver (numerical method)  e.g. ode45
+% or ode23s
+%
+% _ODEfun_ :  The function from Step 2 that calculates $\frac{dy}{dt}$ for
+% given values of _t_ and _y_. If it was written as a user-defined
+% function, the function handle is entered. If it was written as an
+% anonymous funcion, the name of the anonymous function is entered.
+%
+% _tspan_ : A vector that specifies the interval of the solution. The
+% vector must have at least two elements but can have more. If the vector
+% has only two elements, the elements must be [t0,tf], wihi are the initial
+% and final points of the solution interval. The vector _tspan_ can have
+% additional points between the first and last points. The number of
+% elements in tspan affects the output from the command.
+%
+% _y0_ :The initial value of _y_  ( the value of _y_ at the first point of
+% the interval
+%
+% _[t,y] : The output which is the solution of the ODE. _t_ and _y_ are
+% column vectors. The first and last points are teh beginning and end
+% points of the interval. The spacing and number of points in between
+% depends on the input vector tspan. If tspan has two elements (the
+% beginning and end points), the vectors t and y contain the solution at
+% every integration step calculated by the solver.  If tspan has more than
+% two points (additional points between the first and the last), the
+% vectors _t_ and _y_ contain the solution only at these points.  The
+% number of points in tspan does not affect the time steps used for the
+% solution by the program
+
+
+%Call the solver function
+dt = 0.1;
+[t,y] = ode45(ode1,[1:dt:3],4.2);
+
+plot(t,y)
+xlabel('time (s)');
+ylabel('Output');
+title('Output Solution From ode45');
+
+
+%%
+% Use the given data to do a quick comparision.  We'll learn about the
+% 'diff' function later. Until then, do a help on it now to learn of its
+% functionality.
+
+help diff
+
+% We will use it to approximate the first derivative of a data
+% vector...Note for diff, we actually lose one data point.
+der_1st = diff(y)/dt;
+
+% Now let's plot it
+figure(1)
+
+%If the function returned by the solver is correct, we should be able sub
+%the original function back in to check it.
+N = length(t);
+t1 = t(1:N-1);
+
+out1 = ode1(t1,y(2:N));
+plot(t1, out1, t1,der_1st, 'r*' )
+legend('Input Derivative', 'Approximate Derivative');
+
+%% 
+% Let's take it one step further and see if we can come up with a
+% polynomial fit using our regression analysis function.
+approxFit = polyfit(t,y,6)
+
+%Now lets plot the 
+out1 = polyval(approxFit,t);
+plot(t,y, t,out1,'rx')
+legend('ODE Solver Output', 'Regression Analysis Output');
+xlabel('time (s)');
+ylabel('System Output');
+title('Output Comparison');
+
+%% Example Problems
+%
+% 29, 35, 36, 38
+
+##### SOURCE END #####
+--></body></html>
